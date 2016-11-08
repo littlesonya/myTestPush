@@ -1,0 +1,59 @@
+1,初始化一个Git仓库，使用git init命令。
+	添加文件到Git仓库，分两步：
+	第一步，使用命令git add <file>，注意，可反复多次使用，添加多个文件；
+	第二步，使用命令git commit，完成。
+	更改盘符：cd e:
+	返回上一级目录：cd ..
+
+2,要随时掌握工作区的状态，使用git status命令。
+	如果git status告诉你有文件被修改过，用git diff可以查看修改内容。
+	git diff 具体的文件名，但是文件名必须是中文的
+	
+3,设置编码方式：
+	在.git下的config文件最后一行加上
+	[gui]     encoding = utf-8
+	[i18n]     commitencoding = utf-8 
+	[svn]     pathnameencoding = utf-8
+	
+4，在查看修改历史时，对于中文文件名，Git log和gitk都会出现类似的乱码：
+	sepg\344\274\232\350\256\256\346\200\273\347\273\223.doc
+	回答:
+	通过看git的源码，找到了解决方案：
+	git config core.quotepath false	
+	core.quotepath设为false的话，就不会对0x80以上的字符进行quote。中文显示正常
+	
+5，	回退上一个版本：
+	<1>,Git必须知道当前版本是哪个版本，在Git中，用HEAD表示当前版本，也就是最新的提交3628164...882e1e0（注意我的提交ID和你的肯定不一样），
+		上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
+	<2>,HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id。
+		穿梭前，用git log可以查看提交历史，以便确定要回退到哪个版本。
+		要重返未来，用git reflog查看命令历史，以便确定要回到未来的哪个版本。
+		
+6,暂存区是Git非常重要的概念，弄明白了暂存区，就弄明白了Git的很多操作到底干了什么。		
+
+7,查看具体的某个文本里的内容的命令：cat 文件名
+
+8，现在，你又理解了Git是如何跟踪修改的，每次修改，如果不add到暂存区，那就不会加入到commit中。
+
+9，命令git checkout -- readme.txt意思就是，把readme.txt文件在工作区的修改全部撤销，这里有两种情况：
+	一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+	一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+	总之，就是让这个文件回到最近一次git commit或git add时的状态。
+10，用命令git reset HEAD file可以把暂存区的修改撤销掉（unstage），重新放回工作区;	
+
+	git reset命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用HEAD时，表示最新的版本。
+	
+11,git checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。	
+
+12,命令git rm用于删除一个文件。如果一个文件已经被提交到版本库，那么你永远不用担心误删，但是要小心，你只能恢复文件到最新版本，你会丢失最近一次提交后你修改的内容。
+
+13,要关联一个远程库，使用命令git remote add origin git@server-name:path/repo-name.git；
+	关联后，使用命令git push -u origin master第一次推送master分支的所有内容；
+	此后，每次本地提交后，只要有必要，就可以使用命令git push origin master推送最新修改；
+	
+14, 要克隆一个仓库，首先必须知道仓库的地址，然后使用git clone命令克隆。
+  Git支持多种协议，包括https，但通过ssh支持的原生git协议速度最快。	
+  
+  
+	
+	
